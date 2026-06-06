@@ -309,8 +309,20 @@ html, body {
   .ticker .feed { gap: 3px; font-size: 11.5px; }
   .ticker .feed .txt { font-size: 11.5px; }
 
-  .viz-links { right: 14px; left: 14px; bottom: 12px; justify-content: space-between; gap: 6px; }
-  .viz-links .btn { padding: 7px 6px; font-size: 11.5px; flex: 1; text-align: center; min-width: 0; white-space: nowrap; }
+  .viz-links {
+    right: 14px; left: 14px; bottom: 12px;
+    justify-content: space-between; gap: 6px;
+    /* Prevent any child from pushing the row wider than the viewport. */
+    box-sizing: border-box;
+  }
+  .viz-links .btn {
+    padding: 7px 6px; font-size: 11.5px;
+    flex: 1 1 0; min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+    /* If the text is still slightly too long, ellipsise instead of widening. */
+    overflow: hidden; text-overflow: ellipsis;
+  }
   /* Swap to the shorter label so the button never overflows on a phone. */
   .full-label { display: none; }
   .short-label { display: inline; }
