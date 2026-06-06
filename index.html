@@ -53,6 +53,8 @@
 
   <script type="module">
     import { world } from '/sim/world.js';
+    import { autoPlayScenarioOnLoad } from '/sim/autoplay.js';
+
     const btn = document.getElementById('scenario');
     btn.onclick = () => {
       btn.textContent = '▶ Scenario running…';
@@ -63,9 +65,12 @@
     };
     // Reflect remote scenario triggers in the button too.
     world.on('scenario', ({ phase, remote }) => {
-      if (phase === 'start' && remote) { btn.textContent = '▶ Scenario running (other tab)…'; btn.disabled = true; }
-      if (phase === 'end' && remote)   { btn.textContent = '▶ Play blackout scenario'; btn.disabled = false; }
+      if (phase === 'start') { btn.textContent = remote ? '▶ Scenario running (other tab)…' : '▶ Scenario running…'; btn.disabled = true; }
+      if (phase === 'end')   { btn.textContent = '▶ Play blackout scenario'; btn.disabled = false; }
     });
+
+    // Play the scenario automatically the moment the page is ready.
+    autoPlayScenarioOnLoad();
   </script>
 </body>
 </html>

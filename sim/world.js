@@ -216,9 +216,13 @@ export class World extends Bus {
         this._localSend(msg.packet);
         break;
       case 'scenario-start':
+        // Mark the local scenario flag so a near-simultaneous local
+        // auto-play knows to skip — only the first tab wins.
+        this.scenarioRunning = true;
         this.emit('scenario', { phase: 'start', remote: true });
         break;
       case 'scenario-end':
+        this.scenarioRunning = false;
         this.emit('scenario', { phase: 'end', remote: true });
         break;
     }

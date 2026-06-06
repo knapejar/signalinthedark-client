@@ -2,6 +2,7 @@
 
 import { world, KINDS, TEMPLATES, NODE_DEFS } from '/sim/world.js';
 import { renderMarkdown } from '/md.js';
+import { autoPlayScenarioOnLoad } from '/sim/autoplay.js';
 
 // Which node is this page showing? The route is /a or /b, but on a static
 // host the URL might still carry a trailing slash or .html — be tolerant.
@@ -164,3 +165,6 @@ world.on('update', (info) => {
 world.on('tx', (tx) => {
   if (tx.from === ID && tx.phase === 'start') flashTx();
 });
+
+// Play the blackout scenario automatically the moment this console loads.
+autoPlayScenarioOnLoad();

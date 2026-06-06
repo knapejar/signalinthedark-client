@@ -204,5 +204,124 @@ input.text { flex: 1; }
 .ticker .feed .who { font-weight: 700; }
 .ticker .feed .txt { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .viz-links { position: absolute; right: 26px; bottom: 22px; display: flex; gap: 10px; }
+/* By default show the full label everywhere; the mobile media query swaps
+   to the short label. Keeping both in markup avoids JS-driven layout swap. */
+.short-label { display: none; }
+.full-label  { display: inline; }
 
 .topbar { position: sticky; top: 0; }
+
+/* ---- Mobile (≤ 768 px) -------------------------------------------------- */
+/* Everything above is the desktop layout, untouched. This block re-flows it
+   for narrow viewports without changing the desktop look. */
+
+html, body {
+  /* Belt-and-braces safety net so any rogue wide child can never produce
+     horizontal scroll on a phone. */
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  /* Hub --------------------------------------------------------------- */
+  .hub { padding: 28px 16px 60px; }
+  .hub h1 { font-size: 30px; }
+  .blackout-pill {
+    font-size: 10.5px; letter-spacing: 0.10em; padding: 4px 10px;
+    margin-bottom: 16px;
+  }
+  .tagline { font-size: 15px; }
+  .backend-line { font-size: 12px; word-break: break-word; }
+  .cards { gap: 12px; margin-top: 18px; }
+  .card { padding: 16px; border-radius: 12px; }
+  .card h3 { font-size: 18px; }
+  .card p { font-size: 13px; }
+  .section-title { margin-top: 28px; }
+  .controls { flex-direction: column; align-items: stretch; }
+  .controls .btn { text-align: center; }
+
+  /* Node console ------------------------------------------------------ */
+  .node-top {
+    padding: 10px 14px; gap: 10px;
+    flex-wrap: wrap; align-items: flex-start;
+  }
+  .node-id { gap: 10px; min-width: 0; flex: 1 1 auto; }
+  .node-badge { width: 38px; height: 38px; font-size: 18px; }
+  .node-name { font-size: 15px; }
+  .node-role { font-size: 11px; }
+  .link-state {
+    font-size: 11px; gap: 10px;
+    width: 100%; justify-content: flex-end; flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .gauge .bar { width: 50px; }
+  .tx-indicator { font-size: 11px; }
+
+  .tabs { padding: 10px 12px 0; gap: 4px; }
+  .tab { padding: 7px 12px; font-size: 13px; }
+  .pane { padding: 0 12px 12px; }
+
+  .log { padding: 12px; border-radius: 0 10px 10px 10px; }
+  .msg { max-width: 92%; padding: 8px 11px; }
+  .msg .meta { font-size: 10.5px; flex-wrap: wrap; gap: 6px; }
+  .msg .body { font-size: 13.5px; }
+
+  .composer { gap: 8px; margin-top: 10px; }
+  .templates { gap: 6px; }
+  .chip { font-size: 11px; padding: 5px 9px; max-width: 100%; }
+  .compose-row {
+    flex-wrap: wrap; gap: 8px;
+  }
+  .compose-row select  { flex: 1 1 130px; min-width: 0; font-size: 13px; padding: 9px 10px; }
+  .compose-row .text   { flex: 1 1 100%; order: 3; font-size: 13px; padding: 9px 10px; }
+  .compose-row .send-btn { flex: 1 1 110px; order: 2; padding: 9px 14px; font-size: 13px; }
+  .compose-row .btn      { flex: 1 1 110px; order: 4; padding: 9px 12px; font-size: 13px; }
+
+  /* Watchdog ---------------------------------------------------------- */
+  .watch-head { gap: 8px; margin: 4px 0 8px; }
+  .watch-title { font-size: 15px; }
+  .watch-meta { font-size: 11px; gap: 8px; }
+  .watch-body { padding: 14px; border-radius: 10px; }
+  .watch-body h3 { font-size: 14px; }
+
+  /* Visualizer -------------------------------------------------------- */
+  .viz-title { top: 12px; left: 14px; right: 14px; }
+  .viz-title h1 { font-size: 17px; line-height: 1.2; }
+  .viz-title p { font-size: 11.5px; margin-top: 2px; }
+
+  /* On a phone the legend just eats half the canvas. Tuck it into a
+     small, scrollable strip at the very top (under the title). */
+  .legend {
+    position: absolute; top: auto; right: 14px; left: 14px;
+    bottom: auto; top: 70px;
+    flex-direction: row; flex-wrap: wrap; gap: 4px 10px;
+    padding: 8px 10px; font-size: 10.5px;
+    max-height: none;
+  }
+  .legend .row { font-size: 10.5px; }
+  .legend .sw { width: 9px; height: 9px; }
+
+  .ticker {
+    left: 14px; right: 14px; bottom: 64px;
+    max-height: 96px; padding: 8px 10px;
+  }
+  .ticker h4 { margin-bottom: 4px; font-size: 10px; }
+  .ticker .feed { gap: 3px; font-size: 11.5px; }
+  .ticker .feed .txt { font-size: 11.5px; }
+
+  .viz-links { right: 14px; left: 14px; bottom: 12px; justify-content: space-between; gap: 6px; }
+  .viz-links .btn { padding: 7px 6px; font-size: 11.5px; flex: 1; text-align: center; min-width: 0; white-space: nowrap; }
+  /* Swap to the shorter label so the button never overflows on a phone. */
+  .full-label { display: none; }
+  .short-label { display: inline; }
+}
+
+/* Very narrow phones (≤ 380 px) — slightly tighter still. */
+@media (max-width: 380px) {
+  .compose-row select  { flex: 1 1 100%; }
+  .compose-row .send-btn,
+  .compose-row .btn    { flex: 1 1 calc(50% - 4px); padding: 9px 6px; font-size: 12.5px; }
+  .link-state .gauge { display: none; } /* battery gauge: cosmetic, drop it */
+  .viz-title h1 { font-size: 15px; }
+  .viz-links .btn { font-size: 11px; padding: 6px 4px; }
+}

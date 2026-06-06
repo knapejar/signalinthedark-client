@@ -4,6 +4,7 @@
 // World's BroadcastChannel bridge.
 
 import { world, KINDS, NODE_DEFS } from '/sim/world.js';
+import { autoPlayScenarioOnLoad } from '/sim/autoplay.js';
 
 const canvas = document.getElementById('viz');
 const ctx = canvas.getContext('2d');
@@ -26,8 +27,16 @@ function resize() {
   canvas.width = innerWidth * dpr;
   canvas.height = innerHeight * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  N.a.x = innerWidth * 0.24; N.a.y = innerHeight * 0.5;
-  N.b.x = innerWidth * 0.76; N.b.y = innerHeight * 0.5;
+  // On phones, stack the two nodes vertically so neither gets pushed off
+  // screen. On tablets/desktops keep the original side-by-side layout.
+  const narrow = innerWidth < 640;
+  if (narrow) {
+    N.a.x = innerWidth * 0.5; N.a.y = innerHeight * 0.34;
+    N.b.x = innerWidth * 0.5; N.b.y = innerHeight * 0.62;
+  } else {
+    N.a.x = innerWidth * 0.24; N.a.y = innerHeight * 0.5;
+    N.b.x = innerWidth * 0.76; N.b.y = innerHeight * 0.5;
+  }
 }
 addEventListener('resize', resize);
 resize();
@@ -274,15 +283,33 @@ function escapeHtml(s) {
 }
 
 // --- Play scenario button --------------------------------------------------
+// The button has two labels (full / short) so CSS can pick the right one for
+// the current viewport. We swap both labels in lockstep.
 const playBtn = document.getElementById('play');
+function setPlayLabel(full, short) {
+  const f = playBtn.querySelector('.full-label');
+  const s = playBtn.querySelector('.short-label');
+  if (f) f.textContent = full;
+  if (s) s.textContent = short;
+}
 playBtn.onclick = () => {
-  playBtn.textContent = '▶ Running…';
+  setPlayLabel('▶ Running…', '▶ Run');
   playBtn.disabled = true;
   world.playScenario().then(() => setTimeout(() => {
-    playBtn.textContent = '▶ Play scenario'; playBtn.disabled = false;
+    setPlayLabel('▶ Play scenario', '▶ Replay');
+    playBtn.disabled = false;
   }, 800));
 };
 world.on('scenario', ({ phase, remote }) => {
-  if (phase === 'start' && remote) { playBtn.textContent = '▶ Running (other tab)…'; playBtn.disabled = true; }
-  if (phase === 'end' && remote)   { playBtn.textContent = '▶ Play scenario'; playBtn.disabled = false; }
+  if (phase === 'start') {
+    setPlayLabel(remote ? '▶ Running (other tab)…' : '▶ Running…', remote ? '▶ Other' : '▶ Run');
+    playBtn.disabled = true;
+  }
+  if (phase === 'end') {
+    setPlayLabel('▶ Play scenario', '▶ Replay');
+    playBtn.disabled = false;
+  }
 });
+
+// Play the blackout scenario automatically the moment the page is ready.
+autoPlayScenarioOnLoad();
