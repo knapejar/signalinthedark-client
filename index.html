@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signal in the Dark — simulation</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="hub">
+    <div class="blackout-pill"><span class="dot-live"></span> Blackout mode · mobile networks down</div>
+    <h1>Signal in the Dark</h1>
+    <p class="tagline">
+      A prototype of the on-device app that runs on every node of a solar-powered emergency mesh.
+      Two nodes can only reach each other by sending short radio messages — and each node's
+      <b>watchdog</b> turns the incoming stream into a live situational picture for its operator.
+    </p>
+    <div class="backend-line" id="backend">Watchdog backend: <b>heuristic</b> · pure-client, no server, no network</div>
+
+    <div class="cards">
+      <a class="card" href="/a" target="_blank">
+        <span class="eyebrow">Node A · 🏥</span>
+        <h3>Motol Hospital</h3>
+        <p>Operator console: send messages to the EOC and watch the watchdog aggregate everything this node receives.</p>
+        <span class="go">Open node console →</span>
+      </a>
+      <a class="card" href="/b" target="_blank">
+        <span class="eyebrow">Node B · 🛰️</span>
+        <h3>Central EOC</h3>
+        <p>Emergency operations console: the mirror node. Same app, different operator, its own watchdog.</p>
+        <span class="go">Open node console →</span>
+      </a>
+      <a class="card" href="/viz" target="_blank">
+        <span class="eyebrow">The airwaves · 📡</span>
+        <h3>Mesh Visualizer</h3>
+        <p>Watch every packet cross the simulated LoRa link — radio rings, solar gauges, live event feed.</p>
+        <span class="go">Open visualizer →</span>
+      </a>
+    </div>
+
+    <div class="section-title">Run the demo</div>
+    <div class="controls">
+      <button class="btn" id="scenario">▶ Play blackout scenario</button>
+      <a class="btn ghost" href="/viz" target="_blank">Open visualizer first</a>
+    </div>
+    <p class="note">
+      Tip: open the visualizer and both node consoles in separate windows, then press
+      <b>Play blackout scenario</b> to watch messages flow and both watchdogs light up.
+      Everything runs <b>entirely in your browser</b> — no server, no WebSocket, no waiting.
+      Tabs sync over BroadcastChannel, so all open windows mirror the same mesh.
+    </p>
+  </div>
+
+  <script type="module">
+    import { world } from '/sim/world.js';
+    const btn = document.getElementById('scenario');
+    btn.onclick = () => {
+      btn.textContent = '▶ Scenario running…';
+      btn.disabled = true;
+      world.playScenario().then(() => {
+        setTimeout(() => { btn.textContent = '▶ Play blackout scenario'; btn.disabled = false; }, 800);
+      });
+    };
+    // Reflect remote scenario triggers in the button too.
+    world.on('scenario', ({ phase, remote }) => {
+      if (phase === 'start' && remote) { btn.textContent = '▶ Scenario running (other tab)…'; btn.disabled = true; }
+      if (phase === 'end' && remote)   { btn.textContent = '▶ Play blackout scenario'; btn.disabled = false; }
+    });
+  </script>
+</body>
+</html>

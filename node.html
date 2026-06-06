@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Node console — Signal in the Dark</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="node-shell">
+    <div class="node-top">
+      <div class="node-id">
+        <div class="node-badge" id="badge">🏥</div>
+        <div>
+          <div class="node-name" id="nodeName">…</div>
+          <div class="node-role" id="nodeRole">connecting…</div>
+        </div>
+      </div>
+      <div class="link-state">
+        <span class="tx-indicator" id="tx">📡 transmitting…</span>
+        <div class="gauge" title="Solar battery (simulated)">
+          🔋 <span class="bar"><i id="battery" style="width:82%"></i></span>
+        </div>
+        <span id="linkPeer">→ peer</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-view="messaging">💬 Messaging <span class="count" id="cMsg"></span></div>
+      <div class="tab" data-view="watchdog">👁️ Watchdog <span class="count" id="cWatch"></span></div>
+    </div>
+
+    <div class="pane">
+      <!-- MESSAGING -->
+      <div class="view active" data-view="messaging">
+        <div class="log" id="log"></div>
+        <div class="composer">
+          <div class="templates" id="templates"></div>
+          <div class="compose-row">
+            <select id="kind"></select>
+            <input class="text" id="text" placeholder="Type a short radio message…" autocomplete="off" />
+            <button class="send-btn" id="send">Send ▸</button>
+            <button class="btn ghost" id="scenario" title="Play the scripted blackout scenario">▶ Scenario</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WATCHDOG -->
+      <div class="view" data-view="watchdog">
+        <div class="watch-head">
+          <div class="watch-title"><span class="eye">👁️</span> Watchdog — incoming situational picture</div>
+          <div class="watch-meta">
+            <span id="watchSpin"></span>
+            <span class="badge-backend" id="watchBackend">—</span>
+            <span id="watchSources">0 sources</span>
+            <span id="watchUpdated">never updated</span>
+            <button class="btn ghost" id="refresh" style="padding:5px 12px;font-size:12px">⟳ re-aggregate</button>
+          </div>
+        </div>
+        <div class="watch-body" id="watchBody"><div class="empty">No messages received yet. The watchdog will summarise incoming traffic here.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/node.js"></script>
+</body>
+</html>

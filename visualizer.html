@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mesh Visualizer — Signal in the Dark</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="viz-wrap">
+    <canvas id="viz"></canvas>
+  </div>
+  <div class="viz-overlay">
+    <div class="viz-title">
+      <h1>📡 Signal in the Dark — the airwaves</h1>
+      <p>Every pulse is one radio message crossing the simulated LoRa link during a blackout. <b>Running 100% in your browser.</b></p>
+    </div>
+
+    <div class="legend panel" id="legend"></div>
+
+    <div class="ticker panel">
+      <h4>Live mesh traffic</h4>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <div class="viz-links">
+      <a class="btn ghost" href="/a" target="_blank">Node A</a>
+      <a class="btn ghost" href="/b" target="_blank">Node B</a>
+      <button class="btn" id="play">▶ Play scenario</button>
+    </div>
+  </div>
+
+  <script type="module" src="/visualizer.js"></script>
+</body>
+</html>

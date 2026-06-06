@@ -1,0 +1,7 @@
+{
+  "name": "signal-in-the-dark-sim",
+  "version": "2.0.0",
+  "description": "Signal in the Dark — a fully client-side, no-server, no-WebSocket simulation of a solar-powered emergency mesh of two LoRa nodes with a heuristic 'watchdog' that builds a live situational picture from incoming messages.",
+  "private": true,
+  "type": "module"
+}
